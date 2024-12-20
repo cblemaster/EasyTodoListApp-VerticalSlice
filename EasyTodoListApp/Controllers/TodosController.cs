@@ -1,4 +1,6 @@
 ﻿
+using EasyTodoListApp.Todos.Create;
+using EasyTodoListApp.Todos.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,30 +13,25 @@ public class TodosController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
 
-    //[HttpGet("{id:guid}")]
-    //public async Task<IActionResult> GetByIdAsync(Guid id)
-    //{
-    //    var query = new GetProductQuery(id);
-    //    var product = await _mediator.Send(query);
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetByIdAsync(Guid id)
+    {
+        GetByIdQuery query = new(id);
+        GetByIdResponse todo = await _mediator.Send(query);
 
-    //    if (product == null)
-    //    {
-    //        return NotFound($"Product with ID {id} not found.");
-    //    }
-
-    //    return Ok(product);
-    //}
+        return todo is null ? NotFound($"Todo with Id {id} not found.") : Ok(todo);
+    }
 
 
-    //[HttpPost]
-    //public async Task<IActionResult> AddProduct([FromBody] AddProductCommand command)
-    //{
-    //    if (command == null)
-    //    {
-    //        return BadRequest("Invalid product details.");
-    //    }
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateCommand command)
+    {
+        if (command == null)
+        {
+            return BadRequest("Invalid todo details.");
+        }
 
-    //    var result = await _mediator.Send(command);
-    //    return CreatedAtAction(nameof(GetProductById), new { id = result.ProductId }, result);
-    //}
+        CreateResponse result = await _mediator.Send(command);
+        return CreatedAtAction(nameof(GetByIdAsync), new { Id = result.Todo.Id }, result);
+    }
 }

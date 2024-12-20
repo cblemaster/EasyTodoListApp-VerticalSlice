@@ -10,6 +10,8 @@ public class Todo
     public DateTime CreateDate { get; set; }
     public DateTime? UpdateDate { get; set; }
     public Guid Id { get; set; }
+
+    public static Todo NotFound => new() { Description = "Todo not found!" };
 }
 
 // TODO: Create separate domain and persistence models
