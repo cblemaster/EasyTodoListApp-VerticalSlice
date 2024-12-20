@@ -70,4 +70,11 @@ public class TodoRepository(DbContext context) : ITodoRepository
     }
 
     public async Task<Todo?> GetTodoByIdAsync(Guid id) => await _context.Set<Todo>().FindAsync(id);
+
+    private IOrderedEnumerable<Todo> SortTodosByDueDateDescendingThenDescription(IEnumerable<Todo> todos) =>
+        todos.OrderByDescending(t => t.DueDate ?? DateOnly.FromDateTime(DateTime.MinValue))
+            .ThenBy(t => t.Description, StringComparer.CurrentCultureIgnoreCase);
+
+    private IOrderedEnumerable<Todo> SortTodosByDescription(IEnumerable<Todo> todos) =>
+        todos.OrderBy(t => t.Description, StringComparer.CurrentCultureIgnoreCase);
 }
