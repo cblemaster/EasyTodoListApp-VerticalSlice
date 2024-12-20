@@ -1,6 +1,6 @@
 
 using EasyTodoListApp.Todos.Common;
 
-namespace EasyTodoListApp.Todos.Create;
+namespace EasyTodoListApp.Todos.CreateTodo;
 
-public record CreateTodoResponse(Todo Todo);
+public record CreateTodoResponse();

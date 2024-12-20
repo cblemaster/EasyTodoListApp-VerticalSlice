@@ -1,9 +1,7 @@
-﻿
-using EasyTodoListApp.Todos.Create;
-using EasyTodoListApp.Todos.GetById;
+﻿using EasyTodoListApp.Todos.CreateTodo;
+using EasyTodoListApp.Todos.GetTodoById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace EasyTodoListApp.Controllers;
 
@@ -16,22 +14,22 @@ public class TodosController(IMediator mediator) : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetByIdAsync(Guid id)
     {
-        GetByIdQuery query = new(id);
-        GetByIdResponse todo = await _mediator.Send(query);
+        GetTodoByIdQuery query = new(id);
+        GetTodoByIdResponse todo = await _mediator.Send(query);
 
         return todo is null ? NotFound($"Todo with Id {id} not found.") : Ok(todo);
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateTodoCommand command)
     {
         if (command == null)
         {
             return BadRequest("Invalid todo details.");
         }
 
-        CreateResponse result = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetByIdAsync), new { Id = result.Todo.Id }, result);
+        CreateTodoResponse result = await _mediator.Send(command);
+        return CreatedAtAction(actionName: nameof(GetByIdAsync), value: result);
     }
 }
