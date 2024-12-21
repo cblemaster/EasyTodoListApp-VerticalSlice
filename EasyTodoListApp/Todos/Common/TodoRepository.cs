@@ -35,6 +35,8 @@ public class TodoRepository(DbContext context) : ITodoRepository
     public IEnumerable<Todo> GetOverdueTodos() =>
         (GetAllTodosOrEmpty()).Where(t => t.DueDate.HasValue && t.DueDate.Value < DateOnly.FromDateTime(DateTime.Today) && !t.IsComplete).AsEnumerable();
 
+    public async Task<Todo?> GetTodoByIdAsync(Guid id) => await _context.Set<Todo>().FindAsync(id);
+
     public async Task ToggleTodoCompletionAsync(Guid id)
     {
         if (await GetTodoByIdAsync(id) is Todo todo)
@@ -68,8 +70,6 @@ public class TodoRepository(DbContext context) : ITodoRepository
             await _context.SaveChangesAsync();
         }
     }
-
-    public async Task<Todo?> GetTodoByIdAsync(Guid id) => await _context.Set<Todo>().FindAsync(id);
 
     private IOrderedEnumerable<Todo> SortTodosByDueDateDescendingThenDescription(IEnumerable<Todo> todos) =>
         todos.OrderByDescending(t => t.DueDate ?? DateOnly.FromDateTime(DateTime.MinValue))

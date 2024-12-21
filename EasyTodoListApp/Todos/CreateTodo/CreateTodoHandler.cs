@@ -3,9 +3,9 @@ using EasyTodoListApp.Todos.Common;
 
 namespace EasyTodoListApp.Todos.CreateTodo;
 
-public class CreateTodoHandler(ITodoRepository orderRepository)
+public class CreateTodoHandler(ITodoRepository todoRepository)
 {
-    private readonly ITodoRepository _todoRepository = orderRepository;
+    private readonly ITodoRepository _todoRepository = todoRepository;
 
     public async Task<CreateTodoResponse> Handle(CreateTodoCommand request)
     {
