@@ -55,17 +55,17 @@ public class TodoRepository(DbContext context) : ITodoRepository
         }
     }
 
-    public async Task UpdateTodoAsync(Guid id, Todo dto)
+    public async Task UpdateTodoAsync(Guid id, string description, DateOnly? dueDate)
     {
         if (await GetTodoByIdAsync(id) is Todo todo)
         {
-            if (todo.Description != dto.Description)
+            if (todo.Description != description)
             {
-                todo.Description = dto.Description;
+                todo.Description = description;
             }
-            if (todo.DueDate != dto.DueDate)
+            if (todo.DueDate != dueDate)
             {
-                todo.DueDate = dto.DueDate;
+                todo.DueDate = dueDate;
             }
             await _context.SaveChangesAsync();
         }

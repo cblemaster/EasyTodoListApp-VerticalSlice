@@ -13,5 +13,5 @@ public interface ITodoRepository
     IEnumerable<Todo> GetOverdueTodos();
     Task ToggleTodoCompletionAsync(Guid id);
     Task ToggleTodoImportanceAsync(Guid id);
-    Task UpdateTodoAsync(Guid id, Todo dto);
+    Task UpdateTodoAsync(Guid id, string description, DateOnly? dueDate);
 }
